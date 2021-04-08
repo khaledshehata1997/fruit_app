@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_basket/app.dart';
-import 'package:fruit_basket/screens/activate_account.dart';
+import 'file:///C:/Users/khale/Downloads/4_6003746929798811152/fruit_basket/lib/screens/admin/activate_account.dart';
 import 'package:fruit_basket/screens/admin/add_information.dart';
 import 'package:fruit_basket/screens/admin/edit_information.dart';
 class AdminHome extends StatefulWidget {

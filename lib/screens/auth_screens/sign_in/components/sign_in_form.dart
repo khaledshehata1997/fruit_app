@@ -198,19 +198,32 @@ String adminPassword='123456789';
   }
    signin() async {
     if(isAdmin==true){
+      try{
       await _auth.signIn(email.trim(), password.trim());
       Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => AdminHome()),
         );
     }
+      catch(e){
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+      }
+    }
+
       else{
+        try{
       await _auth.signIn(email, password);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
         );
     }
+        catch(ex){
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$ex')));
+
+        }
+      }
+
     }
 
   }

@@ -1,4 +1,4 @@
-import 'package:fruit_basket/screens/activate_account.dart';
+import 'file:///C:/Users/khale/Downloads/4_6003746929798811152/fruit_basket/lib/screens/admin/activate_account.dart';
 import 'package:fruit_basket/screens/admin/admin_home.dart';
 import 'package:fruit_basket/screens/home/home_screen.dart';
 import 'package:fruit_basket/wrappers/authentification_wrapper.dart';
@@ -13,8 +13,7 @@ class App extends StatelessWidget {
         title: appName,
         debugShowCheckedModeBanner: false,
         theme: theme(),
-        home:HomeScreen()
-      //AuthentificationWrapper()
+        home:AuthentificationWrapper()
         //AdminHome()
        //  ActivateAccount()
 
