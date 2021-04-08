@@ -1,4 +1,6 @@
 
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fruit_basket/models/Product.dart';
@@ -6,7 +8,7 @@ import 'package:fruit_basket/services/database/product_database_helper.dart';
 import 'package:logger/logger.dart';
 import '../constants.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends StatefulWidget {
   final String productId;
   final GestureTapCallback press;
   const ProductCard({
@@ -16,9 +18,30 @@ class ProductCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _ProductCardState createState() => _ProductCardState();
+}
+
+class _ProductCardState extends State<ProductCard> {
+  List<String> image;
+  String title,oldPrice,price,description;
+  @override
+  void initState() {
+    var doc=FirebaseFirestore.instance.collection('products').doc(widget.productId).get().then((value) {
+      setState(() {
+        image=List<String>.from(value["image"]);
+        title=value['name'];
+        oldPrice=value['oldPrice'];
+        price=value['price'];
+        description=value['desc'];
+      });
+      print(image);
+    });    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
-      onTap: press,
+      onTap: widget.press,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -29,35 +52,19 @@ class ProductCard extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: FutureBuilder<Product>(
-            future: ProductDatabaseHelper().getProductWithID(productId),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                final Product product = snapshot.data;
-                return buildProductCardItems(product);
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              } else if (snapshot.hasError) {
-                final error = snapshot.error.toString();
-                Logger().e(error);
-              }
-              return Center(
+          child :widget.productId !=null?buildProductCardItems(
+           image,title,price,oldPrice,description
+             ): Center(
                 child: Icon(
                   Icons.error,
                   color: kTextColor,
                   size: 60,
                 ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
+              ))));
+
   }
 
-  Column buildProductCardItems(Product product) {
+  Column buildProductCardItems(List<String> product,String title,price,oldPrice,description) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -66,7 +73,7 @@ class ProductCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.network(
-              product.images[0],
+              product[0],
               fit: BoxFit.contain,
             ),
           ),
@@ -80,7 +87,7 @@ class ProductCard extends StatelessWidget {
               Flexible(
                 flex: 1,
                 child: Text(
-                  "${product.title}\n",
+                  "${title}\n",
                   style: TextStyle(
                     color: kTextColor,
                     fontSize: 13,
@@ -88,7 +95,7 @@ class ProductCard extends StatelessWidget {
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                ),
+                )
               ),
               SizedBox(height: 5),
               Flexible(
@@ -100,7 +107,7 @@ class ProductCard extends StatelessWidget {
                       flex: 5,
                       child: Text.rich(
                         TextSpan(
-                          text: "\₹${product.discountPrice}\n",
+                         text: "\₹${price}\n",
                           style: TextStyle(
                             color: kPrimaryColor,
                             fontWeight: FontWeight.w700,
@@ -108,7 +115,7 @@ class ProductCard extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text: "\₹${product.originalPrice}",
+                            text: "\₹${oldPrice}",
                               style: TextStyle(
                                 color: kTextColor,
                                 decoration: TextDecoration.lineThrough,
@@ -129,15 +136,15 @@ class ProductCard extends StatelessWidget {
                             color: kPrimaryColor,
                           ),
                           Center(
-                            child: Text(
-                              "${product.calculatePercentageDiscount()}%\nOff",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 8,
-                                fontWeight: FontWeight.w900,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
+                            // child: Text(
+                            //   "${description()}%Off",
+                            //   style: TextStyle(
+                            //     color: Colors.white,
+                            //     fontSize: 8,
+                            //     fontWeight: FontWeight.w900,
+                            //   ),
+                            //   textAlign: TextAlign.center,
+                            // ),
                           ),
                         ],
                       ),

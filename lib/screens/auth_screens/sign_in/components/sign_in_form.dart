@@ -5,6 +5,7 @@ import 'package:fruit_basket/exceptions/firebaseauth/messeged_firebaseauth_excep
 import 'package:fruit_basket/exceptions/firebaseauth/signin_exceptions.dart';
 import 'package:fruit_basket/screens/forgot_password/forgot_password_screen.dart';
 import 'package:fruit_basket/screens/home/home_screen.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:fruit_basket/services/auth.dart';
 import 'package:fruit_basket/services/authentification/authentification_service.dart';
 import 'package:fruit_basket/services/model_hud.dart';
@@ -16,7 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:fruit_basket/services/admin_mode.dart';
 import '../../../../constants.dart';
 import '../../../../size_config.dart';
-
+import 'package:fruit_basket/screens/admin/admin_home.dart';
 
 class SignInForm extends StatefulWidget {
   @override
@@ -34,48 +35,68 @@ class _SignInFormState extends State<SignInForm> {
   String password;
   bool remember = false;
   bool modalhud = false;
-
+  bool isAdmin = false;
+  bool isloading = false;
+String adminEmail='admin@gmail.com';
+String adminPassword='123456789';
 
   @override
   Widget build(BuildContext context) {
     final auth2 = Provider.of<AuthViewModel>(context);
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          buildEmailFormField(),
-          SizedBox(height: getProportionateScreenHeight(30)),
-          buildPasswordFormField(),
-          SizedBox(height: getProportionateScreenHeight(30)),
-          buildForgotPasswordWidget(context),
-          SizedBox(height: getProportionateScreenHeight(30)),
-          DefaultButton(
-            text: "Sign in",
-            press:()=> signin()
-          ),
-        ],
-      ),
-    );
+    return  ModalProgressHUD(
+      inAsyncCall: isloading,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            buildEmailFormField(),
+            SizedBox(height: getProportionateScreenHeight(30)),
+            buildPasswordFormField(),
+            SizedBox(height: getProportionateScreenHeight(30)),
+            buildForgotPasswordWidget(context),
+            SizedBox(height: getProportionateScreenHeight(30)),
+            DefaultButton(
+              text: "Sign in",
+              press:()=> signin()
+            ),
+          ],
+        ),
+      ));
   }
 
   Row buildForgotPasswordWidget(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Spacer(),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ForgotPasswordScreen(),
-                ));
-          },
-          child: Text(
-            "Forgot Password",
-            style: TextStyle(
-              decoration: TextDecoration.underline,
+        Row(
+          children: [
+            SizedBox(
+              width: 15,
             ),
-          ),
+           Checkbox(value: isAdmin,
+               onChanged: (value){
+              setState(() {
+                isAdmin=value;;
+              });
+               }),
+          Text('I am admin'),
+          SizedBox(width: MediaQuery.of(context).size.width*.2,)      ,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ForgotPasswordScreen(),
+                    ));
+              },
+              child: Text(
+                "Forgot Password",
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ],
         )
       ],
     );
@@ -176,13 +197,23 @@ class _SignInFormState extends State<SignInForm> {
     }
   }
    signin() async {
-     await _auth.signIn(email.trim(), password.trim());
-
-     Navigator.push(
-       context,
-       MaterialPageRoute(builder: (context) => HomeScreen()),
-     );
-  }
+    if(isAdmin==true){
+      await _auth.signIn(email.trim(), password.trim());
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AdminHome()),
+        );
     }
+      else{
+      await _auth.signIn(email, password);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+    }
+    }
+
+  }
+
   
 

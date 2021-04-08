@@ -1,4 +1,5 @@
 import 'package:fruit_basket/screens/about_developer/about_developer_screen.dart';
+import 'package:fruit_basket/screens/auth_screens/sign_in/sign_in_screen.dart';
 import 'package:fruit_basket/screens/change_display_picture/change_display_picture_screen.dart';
 import 'package:fruit_basket/screens/change_email/change_email_screen.dart';
 import 'package:fruit_basket/screens/change_password/change_password_screen.dart';
@@ -144,6 +145,7 @@ class HomeScreenDrawer extends StatelessWidget {
               final confirmation =
                   await showConfirmationDialog(context, "Confirm Sign out ?");
               if (confirmation) AuthentificationService().signOut();
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>SignInScreen()));
             },
           ),
         ],

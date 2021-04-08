@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fruit_basket/components/nothingtoshow_container.dart';
 import 'package:fruit_basket/components/product_card.dart';
 import 'package:fruit_basket/screens/home/components/section_tile.dart';
 import 'package:fruit_basket/services/data_streams/data_stream.dart';
 import 'package:flutter/material.dart';
+import 'package:fruit_basket/services/firestore_files_access/firestore_files_access_service.dart';
 import 'package:logger/logger.dart';
-
 import '../../../size_config.dart';
 
 class ProductsSection extends StatelessWidget {
@@ -19,7 +20,6 @@ class ProductsSection extends StatelessWidget {
     this.emptyListMessage = "No Products to show here",
     @required this.onProductCardTapped,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,8 +38,20 @@ class ProductsSection extends StatelessWidget {
             press: () {},
           ),
           SizedBox(height: getProportionateScreenHeight(15)),
-          Expanded(
-            child: buildProductsList(),
+          Expanded(child: buildProductsList(),
+            // child: GridView.count(
+            //   crossAxisCount: 2,
+            // crossAxisSpacing: 10,
+            //   children: [
+            //     GestureDetector(
+            //         onTap: ()=>buildProductGrid(x[0]),
+            //       child:Image.asset('assets/images/kiwi.jpg') ,
+            //     ),
+            //     Image.asset('assets/images/banana.jpg'),
+            //     Image.asset('assets/images/mango.jpg'),
+            //     Image.asset('assets/images/orange.jpg'),
+            //   ],
+            // ),
           ),
         ],
       ),
@@ -47,21 +59,27 @@ class ProductsSection extends StatelessWidget {
   }
 
   Widget buildProductsList() {
-    return StreamBuilder<List<String>>(
-      stream: productsStreamController.stream,
+    List<String>x=['1','2','3'];
+    return StreamBuilder<QuerySnapshot>(
+      stream:FirebaseFirestore.instance.collection('products').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data.length == 0) {
+          if (snapshot.data.size == 0) {
             return Center(
               child: NothingToShowContainer(
                 secondaryMessage: emptyListMessage,
               ),
             );
           }
-          return buildProductGrid(snapshot.data);
+          List<String> images=snapshot.data.docs.map((e) => e.id).toList();
+
+          return buildProductGrid(images);
         } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
+          return Container(
+            child: Center(
+
+             child:CircularProgressIndicator()
+            ),
           );
         } else if (snapshot.hasError) {
           final error = snapshot.error;
@@ -71,7 +89,7 @@ class ProductsSection extends StatelessWidget {
           child: NothingToShowContainer(
             iconPath: "assets/icons/network_error.svg",
             primaryMessage: "Something went wrong",
-            secondaryMessage: "Unable to connect to Database",
+            secondaryMessage: "Unable to connect"
           ),
         );
       },
