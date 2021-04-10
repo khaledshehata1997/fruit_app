@@ -74,12 +74,9 @@ class ProductsSection extends StatelessWidget {
           List<String> images=snapshot.data.docs.map((e) => e.id).toList();
 
           return buildProductGrid(images);
-        } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(
-            child: Center(
-
-             child:CircularProgressIndicator()
-            ),
+        } else if (snapshot.data==null) {
+          return Center(
+           child:CircularProgressIndicator()
           );
         } else if (snapshot.hasError) {
           final error = snapshot.error;
@@ -108,11 +105,18 @@ class ProductsSection extends StatelessWidget {
       ),
       itemCount: productsId.length,
       itemBuilder: (context, index) {
-        return ProductCard(
+        return  ProductCard(
           productId: productsId[index],
           press: () {
-            onProductCardTapped.call(productsId[index]);
-          },
+            if(productsId !=null) {
+              onProductCardTapped.call(productsId[index]);
+            }
+            else{
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            },
         );
       },
     );

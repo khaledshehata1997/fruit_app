@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fruit_basket/screens/my_products/my_products_screen.dart';
 
 Future<bool> showConfirmationDialog(
   BuildContext context,
@@ -15,7 +16,7 @@ Future<bool> showConfirmationDialog(
           borderRadius: BorderRadius.circular(15),
         ),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text(
               positiveResponse,
               style: TextStyle(
@@ -23,10 +24,10 @@ Future<bool> showConfirmationDialog(
               ),
             ),
             onPressed: () {
-              Navigator.pop(context, true);
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>MyProductsScreen()));
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text(
               negativeResponse,
               style: TextStyle(

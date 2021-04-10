@@ -23,8 +23,8 @@ class AddToCartFAB extends StatelessWidget {
         bool allowed = AuthentificationService().currentUserVerified;
         if (!allowed) {
           final reverify = await showConfirmationDialog(context,
-              "You haven't verified your email address. This action is only allowed for verified users.",
-              positiveResponse: "Resend verification email",
+              "Product added successfully.",
+              positiveResponse: "Go to Check Out",
               negativeResponse: "Go back");
           if (reverify) {
             final future =
@@ -66,11 +66,21 @@ class AddToCartFAB extends StatelessWidget {
           );
         }
       },
-      label: Text(
-        "Add to Cart",
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
+      label: TextButton(
+        onPressed: ()async{
+          await showConfirmationDialog(
+              context,
+              "Product added successfully.",
+              positiveResponse: "Go to Check Out",
+              negativeResponse: " back");
+        },
+        child: Text(
+          "Add to Cart",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
         ),
       ),
       icon: Icon(

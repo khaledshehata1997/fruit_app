@@ -23,87 +23,166 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final UsersProductsStream usersProductsStream = UsersProductsStream();
 
-  @override
-  void initState() {
-    super.initState();
-    usersProductsStream.init();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    usersProductsStream.dispose();
-  }
-
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   usersProductsStream.init();
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   usersProductsStream.dispose();
+  // }
+  bool orange=true;
+  bool graps=true;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: RefreshIndicator(
-        onRefresh: refreshPage,
-        child: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: getProportionateScreenWidth(screenPadding)),
-            child: SizedBox(
-              width: double.infinity,
-              child: Column(
+    return Scaffold(
+      // appBar: AppBar(
+      //
+      //   backgroundColor: Colors.deepOrange,
+      //   centerTitle: true,
+      //   title: Text('your products',style: TextStyle(color: Colors.white),),
+      // ),
+      body: ListView(
+        children: [
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: getProportionateScreenHeight(20)),
-                  Text("Your Products", style: headingStyle),
-                  Text(
-                    "Swipe LEFT to Edit, Swipe RIGHT to Delete",
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  SizedBox(height: getProportionateScreenHeight(30)),
-                  SizedBox(
-                    height: SizeConfig.screenHeight * 0.7,
-                    child: StreamBuilder<List<String>>(
-                      stream: usersProductsStream.stream,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          final productsIds = snapshot.data;
-                          if (productsIds.length == 0) {
-                            return Center(
-                              child: NothingToShowContainer(
-                                secondaryMessage:
-                                    "Add your first Product to Sell",
-                              ),
-                            );
-                          }
-                          return ListView.builder(
-                            physics: BouncingScrollPhysics(),
-                            itemCount: productsIds.length,
-                            itemBuilder: (context, index) {
-                              return buildProductsCard(productsIds[index]);
-                            },
-                          );
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (snapshot.hasError) {
-                          final error = snapshot.error;
-                          Logger().w(error.toString());
-                        }
-                        return Center(
-                          child: NothingToShowContainer(
-                            iconPath: "assets/icons/network_error.svg",
-                            primaryMessage: "Something went wrong",
-                            secondaryMessage: "Unable to connect to Database",
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(height: getProportionateScreenHeight(60)),
+                  Text('Your Products',style: TextStyle(fontSize: 19,color: Colors.deepOrange,fontWeight: FontWeight.bold),),
+                Icon(Icons.shopping_cart)
                 ],
               ),
-            ),
+              orange?Container(
+                alignment: Alignment.center,
+                  width:130,
+                  height: MediaQuery.of(context).size.height*.3,
+                  child: Column(
+                    children: [
+                      Image.network('https://firebasestorage.googleapis.com/v0/b/fruit-basket-3a084.appspot.com/o/Fruit5.jpg?alt=media&token=b3672bfe-0bcf-4606-a660-c3891a8b36fb'),
+                      Text('price: 4',style: TextStyle(fontSize: 19,color: Colors.black,fontWeight: FontWeight.bold)),
+                      SizedBox(height: 10,),
+
+                      ElevatedButton(onPressed: (){
+                        setState(() {
+                          orange=false;
+                        });
+                      },
+                        child:Text('delete')
+                    )
+                    ],
+                  )):Container(
+                color: Colors.white,
+                width: MediaQuery.of(context).size.width,
+                height: 30,
+              ),
+              SizedBox(height: 15,),
+              Divider(height: 7,thickness: 5,color: Colors.black,),
+          SizedBox(height: 15,)
+              ,graps?Container(
+                alignment: Alignment.center,
+                  width:120,
+                  height: MediaQuery.of(context).size.height*.3,
+                  child: Column(
+                    children: [
+                      Image.network('https://firebasestorage.googleapis.com/v0/b/fruit-basket-3a084.appspot.com/o/Fruit8.jpg?alt=media&token=bf657d14-8bff-453a-a9ed-aa73188bfa10'),
+                     SizedBox(height: 10,),
+                      Text('price: 6',style: TextStyle(fontSize: 19,color: Colors.black,fontWeight: FontWeight.bold)),
+                      SizedBox(height: 10,),
+
+                      ElevatedButton(onPressed: (){
+                        setState(() {
+                          graps=false;
+                        });
+                      },
+                          child:Text('delete')
+                      )
+                    ],
+                  )):Container(
+      color: Colors.white,
+      width: MediaQuery.of(context).size.width,
+      height: 30,
+    ),
+            ],
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 20),
+            child: ElevatedButton(onPressed: (){},
+                child:Text('Buy now')
+
+            ),
+          )
+        ],
       ),
+      // body: RefreshIndicator(
+      //   onRefresh: refreshPage,
+      //   child: SingleChildScrollView(
+      //     physics: AlwaysScrollableScrollPhysics(),
+      //     child: Padding(
+      //       padding: EdgeInsets.symmetric(
+      //           horizontal: getProportionateScreenWidth(screenPadding)),
+      //       child: SizedBox(
+      //         width: double.infinity,
+      //         child: Column(
+      //           children: [
+      //             SizedBox(height: getProportionateScreenHeight(20)),
+      //             Text("Your Products", style: headingStyle),
+      //             Text(
+      //               "Swipe LEFT to Edit, Swipe RIGHT to Delete",
+      //               style: TextStyle(fontSize: 12),
+      //             ),
+      //             SizedBox(height: getProportionateScreenHeight(30)),
+      //             SizedBox(
+      //               height: SizeConfig.screenHeight * 0.7,
+      //               child: StreamBuilder<List<String>>(
+      //                 stream: usersProductsStream.stream,
+      //                 builder: (context, snapshot) {
+      //                   if (snapshot.hasData) {
+      //                     final productsIds = snapshot.data;
+      //                     if (productsIds.length == 0) {
+      //                       return Center(
+      //                         child: NothingToShowContainer(
+      //                           secondaryMessage:
+      //                               "Add your first Product to Sell",
+      //                         ),
+      //                       );
+      //                     }
+      //                     return ListView.builder(
+      //                       physics: BouncingScrollPhysics(),
+      //                       itemCount: productsIds.length,
+      //                       itemBuilder: (context, index) {
+      //                         return buildProductsCard(productsIds[index]);
+      //                       },
+      //                     );
+      //                   } else if (snapshot.connectionState ==
+      //                       ConnectionState.waiting) {
+      //                     return Center(
+      //                       child: CircularProgressIndicator(),
+      //                     );
+      //                   } else if (snapshot.hasError) {
+      //                     final error = snapshot.error;
+      //                     Logger().w(error.toString());
+      //                   }
+      //                   return Center(
+      //                     child: NothingToShowContainer(
+      //                       iconPath: "assets/icons/network_error.svg",
+      //                       primaryMessage: "Something went wrong",
+      //                       secondaryMessage: "Unable to connect to Database",
+      //                     ),
+      //                   );
+      //                 },
+      //               ),
+      //             ),
+      //             SizedBox(height: getProportionateScreenHeight(60)),
+      //           ],
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 

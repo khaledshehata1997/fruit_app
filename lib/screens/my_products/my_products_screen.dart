@@ -7,7 +7,6 @@ class MyProductsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: Body(),
-      //body: Body(),
     );
   }
 }
