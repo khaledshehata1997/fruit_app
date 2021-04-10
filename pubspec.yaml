@@ -31,8 +31,7 @@ dependencies:
   font_awesome_flutter: ^9.0.0
   firebase_core: ^1.0.3
   firebase_analytics:
-  firebase_auth: ^1.0.0
-  firebase_auth_oauth: ^1.0.1
+  firebase_auth:
   firebase: ^9.0.1
   cloud_firestore:
   modal_progress_hud:

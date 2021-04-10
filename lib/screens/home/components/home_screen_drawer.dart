@@ -120,21 +120,21 @@ class HomeScreenDrawer extends StatelessWidget {
             },
           ),
           buildSellerExpansionTile(context),
-          ListTile(
-            leading: Icon(Icons.info),
-            title: Text(
-              "About Developer",
-              style: TextStyle(fontSize: 16, color: Colors.black),
-            ),
-            onTap: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AboutDeveloperScreen(),
-                ),
-              );
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.info),
+          //   title: Text(
+          //     "About Developer",
+          //     style: TextStyle(fontSize: 16, color: Colors.black),
+          //   ),
+          //   onTap: () async {
+          //     // Navigator.push(
+          //     //   context,
+          //     //   MaterialPageRoute(
+          //     //     builder: (context) => AboutDeveloperScreen(),
+          //     //   ),
+          //     // );
+          //   },56
+          // ),
           ListTile(
             leading: Icon(Icons.logout),
             title: Text(

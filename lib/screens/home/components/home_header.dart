@@ -1,6 +1,7 @@
 import 'package:fruit_basket/components/rounded_icon_button.dart';
 import 'package:fruit_basket/components/search_field.dart';
 import 'package:flutter/material.dart';
+import 'package:fruit_basket/screens/my_products/my_products_screen.dart';
 
 import '../../../components/icon_button_with_counter.dart';
 
@@ -32,7 +33,8 @@ class HomeHeader extends StatelessWidget {
         IconButtonWithCounter(
           svgSrc: "assets/icons/Cart Icon.svg",
           numOfItems: 0,
-          press: onCartButtonPressed,
+          press: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>MyProductsScreen()));
+          },
         ),
       ],
     );
